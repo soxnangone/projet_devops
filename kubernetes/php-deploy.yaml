@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: ngoneniang/image-php
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_HOST
+          value: "db"
+        - name: DATABASE_USER
+          value: "root"
+        - name: DATABASE_PASSWORD
+          value: "root"
+        - name: DATABASE_NAME
+          value: "aws_p3_g1"
+

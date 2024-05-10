@@ -8,9 +8,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'docker --version' // Vérifier que Docker est accessible
+                    bat 'docker --version' // Vérifier que Docker est accessible
                     // Lancement de Docker Compose
-                    sh 'docker-compose up -d --build'
+                    bat 'docker-compose up -d --build'
                 }
             }
         }
@@ -19,12 +19,20 @@ pipeline {
                 script {
                     // Mettez ici vos commandes pour exécuter des tests
                     echo "Running tests"
-                    sh 'curl -s http://localhost:8000'
+                    bat 'curl -s http://localhost:8000'
                 }
             }
         }
         stage('Test Deploy') {
             steps {
+                steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    script {
+                        // Déployer sur Kubernetes
+                        bat 'kubectl apply -f mysql-deployment.yml --kubeconfig=${KUBECONFIG} --validate=false '
+                        bat 'kubectl apply -f php-deployment.yaml --kubeconfig=${KUBECONFIG} --validate=false'
+                        bat 'kubectl apply -f php-service.yaml --kubeconfig=${KUBECONFIG} --validate=false'
+                    }
                 script {
                     // Mettez ici vos commandes pour déployer l'application
                     echo "Deploy"
@@ -35,7 +43,7 @@ pipeline {
     post {
         success {
             // Nettoyer les ressources Docker
-            sh 'docker-compose down -v'
+            bat 'docker-compose down -v'
             emailext body: 'Resultat du build: Success', subject: 'Detail du Build', to: 'ngeuya58@gmail.com'
 
         }
