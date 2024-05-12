@@ -39,7 +39,7 @@ pipeline {
             emailext (
                 subject: "Notification de build Jenkins - Échec",
                 body: "Le build de votre pipeline Jenkins a échoué.",
-                to: "snac2214@email.com",
+                to: "snac2214@gmail.com",
             )
         }
     }
