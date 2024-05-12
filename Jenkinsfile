@@ -1,54 +1,46 @@
 pipeline {
-    agent any
-    environment {
-        DOCKER_COMPOSE_VERSION = '1.29.2'
-        PATH = "/usr/local/bin:$PATH" // Assurez-vous que cela inclut le chemin vers Docker
-    }
+    agent any  
     stages {
-        stage('Build') {
+        stage("test") {
+            steps {
+                echo "hello world"
+            }
+        }
+        stage("build") {
             steps {
                 script {
-                    bat 'docker --version' // Vérifier que Docker est accessible
-                    // Lancement de Docker Compose
-                    bat 'docker-compose up -d --build'
+                    bat 'docker --version'
+                   // bat "docker-compose up -d --build"
                 }
             }
         }
-        stage('Test') {
+        stage("deploy to Kubernetes") {
             steps {
-                script {
-                    // Mettez ici vos commandes pour exécuter des tests
-                    echo "Running tests"
-                    bat 'curl -s http://localhost:8000'
-                }
-            }
-        }
-        stage('Test Deploy') {
-            steps {
-                steps {
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG')]) {
                     script {
                         // Déployer sur Kubernetes
-                        bat 'kubectl apply -f mysql-deployment.yml --kubeconfig=${KUBECONFIG} --validate=false '
-                        bat 'kubectl apply -f php-deployment.yaml --kubeconfig=${KUBECONFIG} --validate=false'
-                        bat 'kubectl apply -f php-service.yaml --kubeconfig=${KUBECONFIG} --validate=false'
+                        bat "kubectl apply -f kubernetes/mysql-deployment.yml --kubeconfig=${KUBECONFIG} --validate=false"
+                        bat "kubectl apply -f kubernetes/php-deploy.yaml --kubeconfig=${KUBECONFIG} --validate=false"
+                        bat "kubectl apply -f kubernetes/php-service.yaml --kubeconfig=${KUBECONFIG} --validate=false"
                     }
-                script {
-                    // Mettez ici vos commandes pour déployer l'application
-                    echo "Deploy"
                 }
             }
         }
     }
     post {
         success {
-            // Nettoyer les ressources Docker
-            bat 'docker-compose down -v'
-            emailext body: 'Resultat du build: Success', subject: 'Detail du Build', to: 'ngeuya58@gmail.com'
-
+            emailext (
+                subject: "Notification de build Jenkins - Succès",
+                body: "Le build de votre pipeline Jenkins s'est terminé avec succès.",
+                to: "snac2214@gmail.com",
+            )
         }
         failure {
-            emailext body: 'Resultat du build: Echec', subject: 'Detail du Build', to: 'ngeuya58@gmail.com'
+            emailext (
+                subject: "Notification de build Jenkins - Échec",
+                body: "Le build de votre pipeline Jenkins a échoué.",
+                to: "snac2214@email.com",
+            )
         }
     }
 }

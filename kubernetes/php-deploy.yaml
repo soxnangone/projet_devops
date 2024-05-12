@@ -16,7 +16,7 @@ spec:
       - name: php
         image: ngoneniang/image-php
         ports:
-        - containerPort: 8000
+        - containerPort: 80
         env:
         - name: DATABASE_HOST
           value: "db"
