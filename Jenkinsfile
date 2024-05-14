@@ -16,7 +16,7 @@ pipeline {
         }
         stage("deploy to Kubernetes") {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig1', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'configuration1', variable: 'KUBECONFIG')]) {
                     script {
                         // Déployer sur Kubernetes
                         bat "kubectl apply -f kubernetes/mysql-deployment.yml --kubeconfig=${KUBECONFIG} --validate=false"
@@ -39,7 +39,7 @@ pipeline {
             emailext (
                 subject: "Notification de build Jenkins - Échec",
                 body: "Le build de votre pipeline Jenkins a échoué.",
-                to: "snac2214@email.com",
+                to: "snac2214@gmail.com",
             )
         }
     }
