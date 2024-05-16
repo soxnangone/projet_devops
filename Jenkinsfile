@@ -4,7 +4,7 @@ pipeline {
         // Assurez-vous que ce chemin mène à votre kubeconfig local généré par Minikube
         KUBECONFIG = "C:\\Users\\HP\\.kube\\config"
         // Chemin où se trouvent vos fichiers Terraform dans votre projet
-        TERRA_DIR = "C:\xampp\htdocs\projet_fil_rouge-main\Terraform"
+        TERRA_DIR = "C:\\xampp\\htdocs\\projet_fil_rouge-main\\Terraform"
     }
     stages {
         stage("test") {
