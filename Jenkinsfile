@@ -1,5 +1,11 @@
 pipeline {
-    agent any  
+    agent any
+      environment {
+        // Assurez-vous que ce chemin mène à votre kubeconfig local généré par Minikube
+        KUBECONFIG = "C:\\Users\\HP\\.kube\\config"
+        // Chemin où se trouvent vos fichiers Terraform dans votre projet
+        TERRA_DIR = "C:\xampp\htdocs\projet_fil_rouge-main\Terraform"
+    }
     stages {
         stage("test") {
             steps {
@@ -27,9 +33,9 @@ pipeline {
             }*/
             stage('Deploiement sur Terraform') {
             steps {
-               bat 'terraform init'
-               bat 'terraform plan'
-               bat 'echo "yes" | terraform apply -auto-approve'
+               bat 'cd %TERRA_DIR% && terraform init'
+               bat 'cd %TERRA_DIR% && terraform plan'
+               bat 'cd %TERRA_DIR% && terraform apply -auto-approve'
                 //sh 'minikube service php-service'
             }
 
