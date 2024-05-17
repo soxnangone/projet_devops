@@ -34,9 +34,9 @@ pipeline {
         */
         stage('Déploiement avec Terraform') {
             steps {
-                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" init"
-                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" plan"
-                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" apply -auto-approve"
+                bat "cd %TERRA_DIR% && terraform init"
+                bat "cd %TERRA_DIR% && terraform plan"
+                bat "cd %TERRA_DIR% && terraform apply -auto-approve"
             }
         }
     }
