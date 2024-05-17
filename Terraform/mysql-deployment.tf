@@ -30,8 +30,8 @@ resource "kubernetes_deployment" "db-deployment" {
             value = "root" # Consider using a more secure way to store passwords (e.g., Secrets)
           }
           env {
-            name = "aws_p3_g1"
-            value = "gestion_etudiant"
+            name = "MYSQL_DATABASE"
+            value = "aws_p3_g1"
           }
         }
       }
