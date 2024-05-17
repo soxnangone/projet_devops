@@ -110,7 +110,6 @@ pipeline {
         // Vous pouvez également ajouter d'autres notifications ou actions post-build si nécessaire
     }
 
-    }
     stages {
         stage("Test") {
             steps {
