@@ -1,115 +1,164 @@
-/*pipeline {
-    agent any  
+pipeline {
+    agent any
+    environment {
+        // Définissez ici le chemin d'accès à kubeconfig et au répertoire Terraform
+        KUBECONFIG = "C:\\Users\\Ngoné NIANG SARR\\.kube\\config"
+        TERRA_DIR = "C:\\xampp\\htdocs\\projet_fil_rouge-main\\Terraform"
+        // Assurez-vous que ce chemin pointe vers l'emplacement de l'exécutable Terraform sur la machine Jenkins
+        TERRAFORM_PATH = "C:\\terraform"
+    }
     stages {
-        stage("test") {
+        stage("Test") {
             steps {
-                echo "hello world"
+                echo "Hello, World!"
             }
         }
-        stage("build") {
+        stage("Build") {
             steps {
                 script {
                     bat 'docker --version'
-                   // bat "docker-compose up -d --build"
+                    // Commentez la ligne suivante si docker-compose n'est pas nécessaire
+                    // bat "docker-compose up -d --build"
                 }
             }
         }
-        stage("deploy to Kubernetes") {
+        /*
+        stage("Deploy to Kubernetes") {
             steps {
-                withCredentials([file(credentialsId: 'configuration1', variable: 'KUBECONFIG')]) {
-                    script {
-                        // Déployer sur Kubernetes
-                        bat "kubectl apply -f kubernetes/mysql-deployment.yml --kubeconfig=${KUBECONFIG} --validate=false"
-                        bat "kubectl apply -f kubernetes/php-deploy.yaml --kubeconfig=${KUBECONFIG} --validate=false"
-                        bat "kubectl apply -f kubernetes/php-service.yaml --kubeconfig=${KUBECONFIG} --validate=false"
-                    }
+                script {
+                    // Déployer sur Kubernetes en utilisant kubectl si nécessaire
+                    // Commentez ou supprimez cette section si vous ne l'utilisez pas
                 }
+            }
+        }
+        */
+        stage('Déploiement avec Terraform') {
+            steps {
+                //bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" init"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" plan"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" apply -auto-approve"
             }
         }
     }
     post {
         success {
             emailext (
-                subject: "Notification de build Jenkins - Succès",
+                subject: "Notification de Build Jenkins - Succès",
                 body: "Le build de votre pipeline Jenkins s'est terminé avec succès.",
-                to: "snac2214@gmail.com",
+                to: "snac2214@gmail.com"
             )
         }
         failure {
             emailext (
-                subject: "Notification de build Jenkins - Échec",
+                subject: "Notification de Build Jenkins - Échec",
                 body: "Le build de votre pipeline Jenkins a échoué.",
-                to: "snac2214@gmail.com",
+                to: "snac2214@gmail.com"
             )
         }
+        // Vous pouvez également ajouter d'autres notifications ou actions post-build si nécessaire
     }
-}*/
-
-pipeline {
-    agent any
-    environment {
-        // Assurez-vous que ce chemin mène à votre kubeconfig local généré par Minikube
-        KUBECONFIG = "C:/Users/Ngoné NIANG SARR/.kube/config"
-        // Chemin où se trouvent vos fichiers Terraform dans votre projet
-        TERRA_DIR = "C:/xampp/htdocs/projet_fil_rouge-main/Terraform"
+}"
     }
     stages {
-        stage('Initialization') {
+        stage("Test") {
             steps {
-                // Affiche la version de Terraform pour le débogage
+                echo "Hello, World!"
+            }
+        }
+        stage("Build") {
+            steps {
                 script {
-                    bat 'terraform --version'
+                    bat 'docker --version'
+                    // Commentez la ligne suivante si docker-compose n'est pas nécessaire
+                    // bat "docker-compose up -d --build"
                 }
             }
         }
-        
-        stage("Terraform Init") {
+        /*
+        stage("Deploy to Kubernetes") {
             steps {
                 script {
-                    // Initialise Terraform
-                    bat "cd %TERRA_DIR% && terraform init"
+                    // Déployer sur Kubernetes en utilisant kubectl si nécessaire
+                    // Commentez ou supprimez cette section si vous ne l'utilisez pas
                 }
             }
         }
-        
-        stage("Terraform Plan") {
+        */
+        stage('Déploiement avec Terraform') {
             steps {
-                script {
-                    // Exécute le plan Terraform
-                    bat "cd %TERRA_DIR% && terraform plan"
-                }
-            }
-        }
-        
-        stage("Terraform Apply") {
-            steps {
-                script {
-                    // Applique la configuration Terraform
-                    bat "cd %TERRA_DIR% && terraform apply --auto-approve"
-                }
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" init"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" plan"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" apply -auto-approve"
             }
         }
     }
     post {
-        always {
-            script {
-                // Nettoie l'environnement après l'exécution du pipeline
-                bat "cd %TERRA_DIR% && terraform destroy --auto-approve"
-            }
-        }
-        succes {
+        success {
             emailext (
-                subject : "Notification de build de jenkins avec terraform-succes",
-                body : "votre build de pipeline jenkins terraform passe avec succes",
-                to : "snac2214@gmail.com"
+                subject: "Notification de Build Jenkins - Succès",
+                body: "Le build de votre pipeline Jenkins s'est terminé avec succès.",
+                to: "snac2214@gmail.com"
             )
         }
         failure {
             emailext (
-                subject : "Notification de build de jenkins avec terraform echec",
-                body : "votre build de pipeline jenkins ne passe pas",
-                to : "snac2214@gmail.com"
+                subject: "Notification de Build Jenkins - Échec",
+                body: "Le build de votre pipeline Jenkins a échoué.",
+                to: "snac2214@gmail.com"
             )
         }
+        // Vous pouvez également ajouter d'autres notifications ou actions post-build si nécessaire
+    }
+}"
+    }
+    stages {
+        stage("Test") {
+            steps {
+                echo "Hello, World!"
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    bat 'docker --version'
+                    // Commentez la ligne suivante si docker-compose n'est pas nécessaire
+                    // bat "docker-compose up -d --build"
+                }
+            }
+        }
+        /*
+        stage("Deploy to Kubernetes") {
+            steps {
+                script {
+                    // Déployer sur Kubernetes en utilisant kubectl si nécessaire
+                    // Commentez ou supprimez cette section si vous ne l'utilisez pas
+                }
+            }
+        }
+        */
+        stage('Déploiement avec Terraform') {
+            steps {
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" init"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" plan"
+                bat "cd %TERRA_DIR% && \"%TERRAFORM_PATH%\" apply -auto-approve"
+            }
+        }
+    }
+    post {
+        success {
+            emailext (
+                subject: "Notification de Build Jenkins - Succès",
+                body: "Le build de votre pipeline Jenkins s'est terminé avec succès.",
+                to: "snac2214@gmail.com"
+            )
+        }
+        failure {
+            emailext (
+                subject: "Notification de Build Jenkins - Échec",
+                body: "Le build de votre pipeline Jenkins a échoué.",
+                to: "snac2214@gmail.com"
+            )
+        }
+        // Vous pouvez également ajouter d'autres notifications ou actions post-build si nécessaire
     }
 }
