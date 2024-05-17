@@ -3,7 +3,7 @@ pipeline {
     environment {
         // Définissez ici le chemin d'accès à kubeconfig et au répertoire Terraform
         KUBECONFIG = "C:\\Users\\Ngoné NIANG SARR\\.kube\\config"
-        TERRA_DIR = "C:\xampp\htdocs\projet_fil_rouge-main\Terraform"
+        TERRA_DIR = "C:\\xampp\\htdocs\\projet_fil_rouge-main\\Terraform"
         // Assurez-vous que ce chemin pointe vers l'emplacement de l'exécutable Terraform sur la machine Jenkins
         TERRAFORM_PATH = "C:\\terraform"
     }
