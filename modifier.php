@@ -30,6 +30,10 @@
                     <input type="text" id="nom" name="nom" value="<?php echo $donnees['nom'];?>" placeholder="<?php echo $donnees['nom'];?>"/>
                 </div>
                 <div>
+                    <label for="date_naiss">Date de Naisssance</label>
+                    <input type="date" id="date_naiss" name="date_naiss" value="<?php echo $donnees['date_naiss'];?>" placeholder="<?php echo $donnees['date_naiss'];?>"/>
+                </div>
+                <div>
                     <label for="lieu">Lieu de Naisssance</label>
                     <input type="text" id="lieu" name="lieu" value="<?php echo $donnees['lieu'];?>" placeholder="<?php echo $donnees['lieu'];?>"/>
                 </div>

@@ -1,8 +1,8 @@
 <?php
 // Paramètres de connexion à la base de données
-$serveur = 'db';
+$serveur = 'localhost';
 $nom_utilisateur = 'root';
-$mot_de_passe = 'root';
+$mot_de_passe = '';
 $nom_base_de_donnees = 'aws_p3_g1';
 
 
@@ -17,11 +17,12 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
         // Préparation de la requête de mise à jour
-        $requete = "UPDATE personne SET prenom=:prenom,nom=:nom, lieu=:lieu , adress=:adresse,  email=:email , telephone=:telephone WHERE matricule=:matricule";
+        $requete = "UPDATE personne SET prenom=:prenom,nom=:nom, lieu=:lieu , date_naiss=:date_naiss , adress=:adresse,  email=:email , telephone=:telephone WHERE matricule=:matricule";
 
         $stmt = $connexion->prepare($requete);
         $stmt->bindParam(':prenom', $_POST["prenom"]);
         $stmt->bindParam(':nom', $_POST["nom"]);
+        $stmt->bindParam(':date_naiss', $_POST["date_naiss"]);
         $stmt->bindParam(':lieu', $_POST["lieu"]);
         $stmt->bindParam(':email', $_POST["email"]);
         $stmt->bindParam(':adresse', $_POST["adresse"]);
